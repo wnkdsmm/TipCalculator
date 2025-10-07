@@ -1,4 +1,3 @@
-// MainActivity.kt
 package com.example.tipcalculator
 
 import android.os.Bundle
@@ -32,6 +31,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun TipCalculatorScreen() {
     var orderAmount by remember { mutableStateOf("") }
+    var tipPercent by remember { mutableIntStateOf(0) }
 
     Column(
         modifier = Modifier
@@ -51,6 +51,7 @@ fun TipCalculatorScreen() {
         ) {
             Text(
                 text = "Сумма заказа:",
+                style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.width(120.dp)
             )
             TextField(
@@ -58,6 +59,43 @@ fun TipCalculatorScreen() {
                 onValueChange = { orderAmount = it }
             )
         }
+
+        // Слайдер чаевых
+        Text(
+            text = "Чаевые:",
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.padding(vertical = 8.dp)
+        )
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+        ) {
+            Text(
+                text = "0",
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(end = 8.dp)
+            )
+            Slider(
+                modifier = Modifier.weight(1f),
+                valueRange = 0f..25f,
+                value = tipPercent.toFloat(),
+                onValueChange = { tipPercent = it.toInt() }
+            )
+            Text(
+                text = "25",
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(start = 8.dp)
+            )
+        }
+
+        Text(
+            style = MaterialTheme.typography.headlineMedium,
+            text = "$tipPercent %",
+            modifier = Modifier.padding(vertical = 8.dp)
+        )
     }
 }
 
