@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.tipcalculator.ui.theme.TipCalculatorTheme
+import kotlin.math.roundToInt
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +42,12 @@ fun TipCalculatorScreen() {
         in 6..10 -> 7
         else -> if (count > 10) 10 else 0
     }
+
+    // Рассчитываем итоговую сумму
+    val amount = orderAmount.toDoubleOrNull() ?: 0.0
+    val tipAmount = amount * tipPercent / 100
+    val discountAmount = amount * discountPercent / 100
+    val totalAmount = amount + tipAmount - discountAmount
 
     Column(
         modifier = Modifier
@@ -124,6 +131,13 @@ fun TipCalculatorScreen() {
 
         // Секция скидок
         DiscountSection(discountPercent)
+
+        // Результаты расчета
+        CalculationResults(
+            tipAmount = tipAmount,
+            discountAmount = discountAmount,
+            totalAmount = totalAmount
+        )
     }
 }
 
@@ -167,6 +181,46 @@ fun DiscountRadioButton(percent: Int, selected: Boolean) {
             style = MaterialTheme.typography.titleMedium,
             color = if (selected) MaterialTheme.colorScheme.primary
             else MaterialTheme.colorScheme.onSurface
+        )
+    }
+}
+
+@Composable
+fun CalculationResults(
+    tipAmount: Double,
+    discountAmount: Double,
+    totalAmount: Double
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 16.dp)
+    ) {
+        Text(
+            text = "Итого:",
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+
+        ResultRow(label = "Сумма чаевых:", value = "${tipAmount.roundToInt()} руб")
+        ResultRow(label = "Сумма скидки:", value = "${discountAmount.roundToInt()} руб")
+        ResultRow(label = "Итоговая сумма:", value = "${totalAmount.roundToInt()} руб")
+    }
+}
+
+@Composable
+fun ResultRow(label: String, value: String) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(text = label, style = MaterialTheme.typography.bodyMedium)
+        Text(
+            text = value,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.primary
         )
     }
 }
