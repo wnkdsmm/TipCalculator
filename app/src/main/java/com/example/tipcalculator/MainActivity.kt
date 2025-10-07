@@ -3,11 +3,14 @@ package com.example.tipcalculator
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.tipcalculator.ui.theme.TipCalculatorTheme
@@ -16,13 +19,11 @@ import kotlin.math.roundToInt
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContent {
             TipCalculatorTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    TipCalculatorScreen()
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    TipCalculatorScreen(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
@@ -30,9 +31,9 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun TipCalculatorScreen() {
-    var orderAmount by remember { mutableStateOf("") }
+fun TipCalculatorScreen(modifier: Modifier = Modifier) {
     var tipPercent by remember { mutableIntStateOf(0) }
+    var orderAmount by remember { mutableStateOf("") }
     var dishCount by remember { mutableStateOf("") }
 
     // Рассчитываем скидку
@@ -50,10 +51,12 @@ fun TipCalculatorScreen() {
     val totalAmount = amount + tipAmount - discountAmount
 
     Column(
+
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
+        // Заголовок
         Text(
             text = "Калькулятор чаевых",
             style = MaterialTheme.typography.headlineSmall,
@@ -75,7 +78,8 @@ fun TipCalculatorScreen() {
             TextField(
                 value = orderAmount,
                 onValueChange = { orderAmount = it },
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
         }
 
@@ -94,7 +98,8 @@ fun TipCalculatorScreen() {
             TextField(
                 value = dishCount,
                 onValueChange = { dishCount = it },
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
         }
 
@@ -102,7 +107,9 @@ fun TipCalculatorScreen() {
         Text(
             text = "Чаевые:",
             style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.padding(vertical = 8.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
         )
 
         Row(
@@ -129,6 +136,7 @@ fun TipCalculatorScreen() {
             )
         }
 
+        // Процент чаевых
         Text(
             style = MaterialTheme.typography.headlineMedium,
             text = "$tipPercent %",
@@ -173,7 +181,7 @@ fun DiscountSection(discountPercent: Int) {
 
         // Описание скидок
         Text(
-            text = "Скидка рассчитывается в зависимости от количества заказанных блюд:" +
+            text = "Скидка рассчитывается в зависимости от количества заказанных блюд: " +
                     "1-2 блюда – 3%, 3-5 блюд – 5%, 6-10 – 7%, более 10 блюд – 10%.",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -240,10 +248,12 @@ fun ResultRow(label: String, value: String) {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showSystemUi = true)
 @Composable
 fun TipCalculatorPreview() {
     TipCalculatorTheme {
-        TipCalculatorScreen()
+        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+            TipCalculatorScreen(modifier = Modifier.padding(innerPadding))
+        }
     }
 }
