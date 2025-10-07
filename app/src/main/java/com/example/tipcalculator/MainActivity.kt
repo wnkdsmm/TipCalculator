@@ -57,13 +57,15 @@ fun TipCalculatorScreen() {
         Text(
             text = "Калькулятор чаевых",
             style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier.padding(vertical = 16.dp)
+            modifier = Modifier.padding(top = 40.dp, bottom = 20.dp)
         )
 
         // Поле ввода суммы заказа
         Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(vertical = 8.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = "Сумма заказа:",
@@ -72,14 +74,17 @@ fun TipCalculatorScreen() {
             )
             TextField(
                 value = orderAmount,
-                onValueChange = { orderAmount = it }
+                onValueChange = { orderAmount = it },
+                modifier = Modifier.weight(1f)
             )
         }
 
         // Поле ввода количества блюд
         Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(vertical = 8.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = "Количество блюд:",
@@ -88,7 +93,8 @@ fun TipCalculatorScreen() {
             )
             TextField(
                 value = dishCount,
-                onValueChange = { dishCount = it }
+                onValueChange = { dishCount = it },
+                modifier = Modifier.weight(1f)
             )
         }
 
@@ -100,10 +106,10 @@ fun TipCalculatorScreen() {
         )
 
         Row(
-            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = "0",
@@ -164,6 +170,15 @@ fun DiscountSection(discountPercent: Int) {
             DiscountRadioButton(percent = 7, selected = discountPercent == 7)
             DiscountRadioButton(percent = 10, selected = discountPercent == 10)
         }
+
+        // Описание скидок
+        Text(
+            text = "Скидка рассчитывается в зависимости от количества заказанных блюд:" +
+                    "1-2 блюда – 3%, 3-5 блюд – 5%, 6-10 – 7%, более 10 блюд – 10%.",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(top = 16.dp)
+        )
     }
 }
 
