@@ -32,6 +32,7 @@ class MainActivity : ComponentActivity() {
 fun TipCalculatorScreen() {
     var orderAmount by remember { mutableStateOf("") }
     var tipPercent by remember { mutableIntStateOf(0) }
+    var dishCount by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -57,6 +58,22 @@ fun TipCalculatorScreen() {
             TextField(
                 value = orderAmount,
                 onValueChange = { orderAmount = it }
+            )
+        }
+
+        // Поле ввода количества блюд
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(vertical = 8.dp)
+        ) {
+            Text(
+                text = "Количество блюд:",
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.width(120.dp)
+            )
+            TextField(
+                value = dishCount,
+                onValueChange = { dishCount = it }
             )
         }
 
