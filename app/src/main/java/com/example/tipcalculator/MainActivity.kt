@@ -34,6 +34,14 @@ fun TipCalculatorScreen() {
     var tipPercent by remember { mutableIntStateOf(0) }
     var dishCount by remember { mutableStateOf("") }
 
+    // Рассчитываем скидку
+    val discountPercent = when (val count = dishCount.toIntOrNull() ?: 0) {
+        in 1..2 -> 3
+        in 3..5 -> 5
+        in 6..10 -> 7
+        else -> if (count > 10) 10 else 0
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -111,6 +119,13 @@ fun TipCalculatorScreen() {
         Text(
             style = MaterialTheme.typography.headlineMedium,
             text = "$tipPercent %",
+            modifier = Modifier.padding(vertical = 8.dp)
+        )
+
+        // Отображение скидки
+        Text(
+            text = "Текущая скидка: $discountPercent%",
+            style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.padding(vertical = 8.dp)
         )
     }
